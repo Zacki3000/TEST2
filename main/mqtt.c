@@ -256,6 +256,29 @@ void mqtt_start(void)
 
     mqtt_cfg.broker.address.uri = mqtt_uri;
     mqtt_cfg.broker.verification.crt_bundle_attach = esp_crt_bundle_attach;
+
+    char mqtt_username[CONFIG_MQTT_USERNAME_BUFFER_SIZE];
+    size = sizeof(mqtt_username);
+    res = config_get_str(CONFIG_INDEX_MQTT_USERNAME, mqtt_username, &size);
+    if (res != ESP_OK)
+    {
+        ESP_LOGE(TAG, "Could not get MQTT username from config: %s", esp_err_to_name(res));
+        return;
+    }
+    if (mqtt_username[0] != '\0')
+        mqtt_cfg.credentials.username = mqtt_username;
+
+    char mqtt_password[CONFIG_MQTT_PASSWORD_BUFFER_SIZE];
+    size = sizeof(mqtt_password);
+    res = config_get_str(CONFIG_INDEX_MQTT_PASSWORD, mqtt_password, &size);
+    if (res != ESP_OK)
+    {
+        ESP_LOGE(TAG, "Could not get MQTT password from config: %s", esp_err_to_name(res));
+        return;
+    }
+    if (mqtt_password[0] != '\0')
+        mqtt_cfg.credentials.authentication.password = mqtt_password;
+
     struct last_will_t last_will = {
         .topic = status_topic,
         .msg = "offline",
