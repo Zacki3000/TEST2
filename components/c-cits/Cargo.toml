@@ -1,0 +1,27 @@
+[package]
+name = "c-cits"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["staticlib"]
+
+[build-dependencies]
+bindgen = "0.72.1"
+cbindgen = "0.29.4"
+
+[dependencies]
+bitvec = { version = "1.0.1", default-features = false }
+c-its-parser = { version = "2.2.1", default-features = false, features = ["cam_1_4_1", "libm", "transport", "geo"] }
+chrono = { version = "0.4.45", default-features = false }
+geonetworking = { version = "0.2.1", default-features = false }
+libc = { version = "0.2.186", default-features = false }
+nmea = { version = "0.7.0", default-features = false, features = ["GNSS", "TXT", "ZDA"] }
+
+[profile.dev]
+opt-level = "s"
+
+[profile.release]
+debug = true
+opt-level = "z"
+codegen-units = 1

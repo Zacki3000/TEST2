@@ -15,11 +15,14 @@
 #include "esp_wifi.h"
 #include "nvs_flash.h"
 
+#include "cam_tx.h"
 #include "cmd_sniffer.h"
 #include "cmd_pcap.h"
 #include "config.h"
 #include "ethernet.h"
 #include "events.h"
+#include "gnss.h"
+#include "gnss_pps.h"
 #include "led.h"
 #include "mqtt.h"
 #include "ota.h"
@@ -163,6 +166,11 @@ void app_main(void)
     register_ota_cmd();
 
     sniffer_autostart();
+
+    gnss_pps_init();
+    gnss_init();
+
+    cam_tx_init();
 
     // start console REPL
     ESP_ERROR_CHECK(esp_console_start_repl(repl));

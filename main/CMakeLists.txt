@@ -1,11 +1,14 @@
 idf_component_register(
     SRCS
         "main.c"
+        "cam_tx.c"
         "cmd_sniffer.c"
         "cmd_pcap.c"
         "config.c"
         "ethernet.c"
         "events.c"
+        "gnss.cpp"
+        "gnss_pps.cpp"
         "led.c"
         "mqtt.cpp"
         "ota.c"
@@ -17,13 +20,25 @@ idf_component_register(
         app_trace
         app_update
         console
+        esp_driver_mcpwm
         esp_eth
         esp_https_ota
         esp_netif
         esp_wifi
         fatfs
         nvs_flash
+        c-cits
     INCLUDE_DIRS
         "."
+)
+
+target_compile_options(${COMPONENT_TARGET}
+    PRIVATE
+        -fstack-reuse=all
+        -Wno-unused-function
+        -Wno-deprecated-declarations
+        -Wno-missing-field-initializers
+        -Wno-parentheses
+        -Werror=write-strings
 )
 
