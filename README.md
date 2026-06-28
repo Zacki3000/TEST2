@@ -62,7 +62,11 @@ To enter the ESP-IDF environment, you need to source the `export.sh` script once
 
 Afterwards, you can build the project:
 ```
+# without the Rust library (default)
 idf.py build
+
+# with the Rust library, if you want to use GNSS or CAM TX
+idf.py build -DENABLE_RUST_LIB=1
 ```
 
 To flash the firmware and monitor the output, you can use the following command:

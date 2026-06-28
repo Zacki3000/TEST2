@@ -1,7 +1,12 @@
-#include "esp_private/wifi_os_adapter.h"
-#include "esp_wifi.h"
+#include <esp_private/wifi_os_adapter.h>
+#include <esp_log.h>
+#include <esp_wifi.h>
+
+#include "config.h"
 
 #include "tx_custom.h"
+
+static const char TAG[] = "TX_CUSTOM";
 
 esp_err_t ieee80211_raw_frame_sanity_check(wifi_interface_t ifx, const void *buffer, int32_t len, bool en_sys_seq);
 esp_err_t ieee80211_post_hmac_tx(void *ebuf);
@@ -93,6 +98,20 @@ static_assert(sizeof(x_ebuf_t) == 0x40);
 
 esp_err_t esp_wifi_80211_tx_custom(wifi_interface_t ifx, const void *buffer, int32_t len, bool en_sys_seq, wifi_tx_rate_config_t *tx_rate_config, wifi_band_t band, wifi_bandwidth_t bw)
 {
+    uint8_t enabled = 0;
+    esp_err_t res = config_get_u8(CONFIG_INDEX_TX_ENABLE, &enabled);
+    if (res != ESP_OK && res != ESP_ERR_NOT_FOUND)
+    {
+        ESP_LOGE(TAG, "config_get_u8 failed: %s", esp_err_to_name(res));
+        return ESP_FAIL;
+    }
+
+    if (!enabled)
+    {
+        ESP_LOGW(TAG, "Attempt to TX frame while txenable config is not set");
+        return ESP_ERR_NOT_ALLOWED;
+    }
+
     esp_err_t result = 0;//ieee80211_raw_frame_sanity_check(ifx, buffer, len, en_sys_seq);
 
     if (!result)

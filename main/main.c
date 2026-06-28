@@ -55,7 +55,7 @@ static void initialize_filesystem(void)
 #endif
 }
 
-/* Initialize wifi with tcp/ip adapter */
+/* Initialize wifi */
 static void initialize_wifi(void)
 {
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
@@ -168,10 +168,12 @@ void app_main(void)
 
     sniffer_autostart();
 
+#if CONFIG_ENABLE_GNSS && ENABLE_RUST_LIB
     gnss_pps_init();
     gnss_init();
 
     cam_tx_init();
+#endif
 
     // start console REPL
     ESP_ERROR_CHECK(esp_console_start_repl(repl));

@@ -149,4 +149,41 @@ menu "Example Configuration"
         bool "Enable tx_test command"
         default n
 
+    config ENABLE_GNSS
+        bool "Enable GNSS positioning and time sync"
+        default n
+        help
+            Enables receiving of position and synchronization of system time via an external GNSS receiver.
+
+            Currently only tested to work with ATGM336H module.
+
+    menu "GNSS pin configuration (UART + PPS)"
+        depends on ENABLE_GNSS
+
+        config GNSS_PIN_TX
+            int "TX GPIO number"
+            range ENV_GPIO_RANGE_MIN ENV_GPIO_OUT_RANGE_MAX
+            default 5
+            help
+                GPIO pin number for TX.
+
+        config GNSS_PIN_RX
+            int "RX GPIO number"
+            range ENV_GPIO_RANGE_MIN ENV_GPIO_IN_RANGE_MAX
+            default 3
+            help
+                GPIO pin number for RX.
+
+        config GNSS_PIN_PPS
+            int "PPS GPIO number"
+            range ENV_GPIO_RANGE_MIN ENV_GPIO_OUT_RANGE_MAX
+            default 4
+            help
+                GPIO pin number for PPS (Pulse Per Second).
+    endmenu
+
+    config ENABLE_ITS
+        bool "Enable ITS"
+        default n
+
 endmenu

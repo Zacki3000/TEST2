@@ -1,5 +1,7 @@
 #include "sdkconfig.h"
 
+#if CONFIG_ENABLE_GNSS && ENABLE_RUST_LIB
+
 #include <stdint.h>
 #include <sys/time.h>
 
@@ -209,3 +211,5 @@ extern "C" void gnss_pps_init()
     ESP_ERROR_CHECK(esp_timer_create(&create_args, &systo_timer_handle));
     ESP_ERROR_CHECK(esp_timer_start_periodic(systo_timer_handle, 1'000'000ull));
 }
+
+#endif

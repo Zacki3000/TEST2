@@ -1,5 +1,7 @@
 #include "sdkconfig.h"
 
+#if CONFIG_ENABLE_GNSS && ENABLE_RUST_LIB
+
 #include <string>
 
 #include "driver/uart.h"
@@ -13,8 +15,8 @@
 
 constexpr uart_port_t UART = UART_NUM_1;
 
-constexpr gpio_num_t TX_IO = GPIO_NUM_5;
-constexpr gpio_num_t RX_IO = GPIO_NUM_3;
+constexpr gpio_num_t TX_IO = (gpio_num_t)CONFIG_GNSS_PIN_TX;
+constexpr gpio_num_t RX_IO = (gpio_num_t)CONFIG_GNSS_PIN_RX;
 
 static QueueHandle_t uart_queue;
 static esp_timer_handle_t timer;
@@ -89,9 +91,13 @@ extern "C" void gnss_init()
     // Configure UART parameters
     ESP_ERROR_CHECK(uart_param_config(UART, &uart_config));
 
-    ESP_ERROR_CHECK(uart_set_pin(UART, 5, 3, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+    //ESP_ERROR_CHECK(uart_set_pin(UART, TX_IO, RX_IO, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+    uart_set_pin(UART, TX_IO, RX_IO, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
 
+    // Switch baud rate to 115200, otherwise we are too slow to reliably keep sync with PPS pin
     uart_tx_chars(UART, "$PCAS01,5*19\r\n", sizeof("$PCAS01,5*19\r\n") - 1);
+
+    ESP_ERROR_CHECK(uart_wait_tx_done(UART, portMAX_DELAY));
 
     uart_config.baud_rate = 115200;
     ESP_ERROR_CHECK(uart_param_config(UART, &uart_config));
@@ -113,3 +119,5 @@ extern "C" GnssState *get_gnss_state()
 {
     return gnss_state;
 }
+
+#endif

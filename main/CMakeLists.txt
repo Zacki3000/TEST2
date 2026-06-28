@@ -1,3 +1,5 @@
+set(ENABLE_RUST_LIB false CACHE BOOL "Enable building Rust library. Required for GNSS and ITS.")
+
 idf_component_register(
     SRCS
         "main.c"
@@ -42,4 +44,11 @@ target_compile_options(${COMPONENT_TARGET}
         -Wno-parentheses
         -Werror=write-strings
 )
+
+if(${ENABLE_RUST_LIB})
+    target_compile_definitions(${COMPONENT_TARGET}
+        PRIVATE
+            -DENABLE_RUST_LIB=1
+    )
+endif()
 

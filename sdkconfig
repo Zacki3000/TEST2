@@ -1190,6 +1190,10 @@ CONFIG_LEDSTRIP_PIN=26
 CONFIG_ENABLE_TEMPERATURE=y
 # default:
 # CONFIG_ENABLE_TX_TEST is not set
+# default:
+# CONFIG_ENABLE_GNSS is not set
+# default:
+# CONFIG_ENABLE_ITS is not set
 # end of Example Configuration
 
 #

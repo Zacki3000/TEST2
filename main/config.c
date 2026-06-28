@@ -59,17 +59,24 @@ static esp_err_t config_get_broadcast_only(uint8_t *broadcast_only);
 static esp_err_t config_get_led_brightness(uint8_t *led_brightness);
 
 static const config_key_t config_keys[] = {
-    [CONFIG_INDEX_NODEID]         = { "nodeid",           NVS_TYPE_STR, CONFIG_NODEID_BUFFER_SIZE,   config_get_node_id,        NULL },
-    [CONFIG_INDEX_MQTT_URI]       = { "mqtturi",          NVS_TYPE_STR, CONFIG_MQTT_URI_BUFFER_SIZE, config_get_mqtt_uri,       NULL },
-    [CONFIG_INDEX_ETH_IP]         = { "ethip",            NVS_TYPE_STR, CONFIG_IPV4_BUFFER_SIZE,     NULL,                      NULL },
-    [CONFIG_INDEX_ETH_NETMASK]    = { "ethnm",            NVS_TYPE_STR, CONFIG_IPV4_BUFFER_SIZE,     NULL,                      NULL },
-    [CONFIG_INDEX_ETH_GATEWAY]    = { "ethgw",            NVS_TYPE_STR, CONFIG_IPV4_BUFFER_SIZE,     NULL,                      NULL },
-    [CONFIG_INDEX_ETH_DNS0]       = { "ethdns0",          NVS_TYPE_STR, CONFIG_IPV4_BUFFER_SIZE,     NULL,                      NULL },
-    [CONFIG_INDEX_ETH_DNS1]       = { "ethdns1",          NVS_TYPE_STR, CONFIG_IPV4_BUFFER_SIZE,     NULL,                      NULL },
-    [CONFIG_INDEX_ETH_DNS2]       = { "ethdns2",          NVS_TYPE_STR, CONFIG_IPV4_BUFFER_SIZE,     NULL,                      NULL },
-    [CONFIG_INDEX_AUTOSTART_CHAN] = { "autostartchan",    NVS_TYPE_U32, 0,                           config_get_autostart_chan, NULL },
-    [CONFIG_INDEX_BROADCAST_ONLY] = { "broadcastonly",    NVS_TYPE_U8,  0,                           config_get_broadcast_only, NULL },
-    [CONFIG_INDEX_LED_BRIGHTNESS] = { "ledbrightness",    NVS_TYPE_U8,  0,                           config_get_led_brightness, NULL },
+    [CONFIG_INDEX_NODEID]           = { "nodeid",           NVS_TYPE_STR, CONFIG_NODEID_BUFFER_SIZE,   config_get_node_id,        NULL },
+    [CONFIG_INDEX_MQTT_URI]         = { "mqtturi",          NVS_TYPE_STR, CONFIG_MQTT_URI_BUFFER_SIZE, config_get_mqtt_uri,       NULL },
+    [CONFIG_INDEX_ETH_IP]           = { "ethip",            NVS_TYPE_STR, CONFIG_IPV4_BUFFER_SIZE,     NULL,                      NULL },
+    [CONFIG_INDEX_ETH_NETMASK]      = { "ethnm",            NVS_TYPE_STR, CONFIG_IPV4_BUFFER_SIZE,     NULL,                      NULL },
+    [CONFIG_INDEX_ETH_GATEWAY]      = { "ethgw",            NVS_TYPE_STR, CONFIG_IPV4_BUFFER_SIZE,     NULL,                      NULL },
+    [CONFIG_INDEX_ETH_DNS0]         = { "ethdns0",          NVS_TYPE_STR, CONFIG_IPV4_BUFFER_SIZE,     NULL,                      NULL },
+    [CONFIG_INDEX_ETH_DNS1]         = { "ethdns1",          NVS_TYPE_STR, CONFIG_IPV4_BUFFER_SIZE,     NULL,                      NULL },
+    [CONFIG_INDEX_ETH_DNS2]         = { "ethdns2",          NVS_TYPE_STR, CONFIG_IPV4_BUFFER_SIZE,     NULL,                      NULL },
+    [CONFIG_INDEX_AUTOSTART_CHAN]   = { "autostartchan",    NVS_TYPE_U32, 0,                           config_get_autostart_chan, NULL },
+    [CONFIG_INDEX_BROADCAST_ONLY]   = { "broadcastonly",    NVS_TYPE_U8,  0,                           config_get_broadcast_only, NULL },
+    [CONFIG_INDEX_LED_BRIGHTNESS]   = { "ledbrightness",    NVS_TYPE_U8,  0,                           config_get_led_brightness, NULL },
+    [CONFIG_INDEX_TX_ENABLE]        = { "txenable",         NVS_TYPE_U8,  0,                           NULL,                      NULL },
+// see cam_tx.c for why GNSS is currently required for the ITS stack
+#ifdef CONFIG_ENABLE_GNSS
+    [CONFIG_INDEX_ITS_ENABLE]       = { "itsenable",        NVS_TYPE_U8,  0,                           NULL,                      NULL },
+    [CONFIG_INDEX_ITS_CAM_TX]       = { "itscamtx",         NVS_TYPE_U8,  0,                           NULL,                      NULL },
+    [CONFIG_INDEX_ITS_STATION_TYPE] = { "itsstype",         NVS_TYPE_U8,  0,                           NULL,                      NULL },
+#endif
 };
 #define CONFIG_KEYS_END (&config_keys[sizeof(config_keys)/sizeof(*config_keys)])
 
