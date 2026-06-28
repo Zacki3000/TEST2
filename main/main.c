@@ -29,6 +29,7 @@
 #include "sdcard.h"
 #include "spi.h"
 #include "temperature.h"
+#include "tx_test.h"
 
 #if CONFIG_SNIFFER_STORE_HISTORY
 #define HISTORY_MOUNT_POINT "/data"
@@ -158,12 +159,12 @@ void app_main(void)
 #endif
     register_sniffer_cmd();
     register_pcap_cmd();
-
     config_register_commands();
-
     register_reboot();
-
     register_ota_cmd();
+#ifdef CONFIG_ENABLE_TX_TEST
+    register_tx_test();
+#endif
 
     sniffer_autostart();
 

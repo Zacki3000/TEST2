@@ -144,4 +144,9 @@ menu "Example Configuration"
     config ENABLE_TEMPERATURE
         bool "Enable I2C temperature sensor"
         default y
+
+    config ENABLE_TX_TEST
+        bool "Enable tx_test command"
+        default n
+
 endmenu

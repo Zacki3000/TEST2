@@ -1188,6 +1188,8 @@ CONFIG_SNIFFER_TASK_PRIORITY=2
 CONFIG_LEDSTRIP_PIN=26
 # default:
 CONFIG_ENABLE_TEMPERATURE=y
+# default:
+# CONFIG_ENABLE_TX_TEST is not set
 # end of Example Configuration
 
 #

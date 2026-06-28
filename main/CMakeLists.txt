@@ -16,6 +16,7 @@ idf_component_register(
         "spi.c"
         "temperature.c"
         "tx_custom.c"
+        "tx_test.c"
     PRIV_REQUIRES
         app_trace
         app_update
