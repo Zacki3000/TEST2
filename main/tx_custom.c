@@ -106,7 +106,9 @@ esp_err_t esp_wifi_80211_tx_custom(wifi_interface_t ifx, const void *buffer, int
         return ESP_FAIL;
     }
 
+#ifdef CONFIG_ENABLE_TX
     if (!enabled)
+#endif
     {
         ESP_LOGW(TAG, "Attempt to TX frame while txenable config is not set");
         return ESP_ERR_NOT_ALLOWED;

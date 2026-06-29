@@ -157,6 +157,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 
                     esp_mqtt_client_publish(client, result_topic.c_str(), result_buf, strlen(result_buf), 0, 0);
                 }
+#ifdef CONFIG_ENABLE_TX
                 else if (topic == tx_topic)
                 {
                     wifi_tx_rate_config_t config = {
@@ -167,6 +168,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
                     };
                     esp_wifi_80211_tx_custom(WIFI_IF_STA, event->data, event->data_len, true, &config, WIFI_BAND_5G, WIFI_BW20);
                 }
+#endif // CONFIG_ENABLE_TX
             }
             break;
         case MQTT_EVENT_ERROR:

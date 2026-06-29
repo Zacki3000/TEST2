@@ -107,7 +107,7 @@ void gnss_pps_adjust_system_time(void *)
     ESP_LOGD(TAG, "gtu %lld", gnsstime_usec);
     ESP_LOGD(TAG, "diff %lld", diff);
 
-    if (diff > 3'600'000'000ll || diff < -3'600'000'000)
+    if (diff > 3'600'000'000ll || diff < -3'600'000'000ll)
     {
         struct timeval tv_gnss = {
             .tv_sec = gnsstime_usec / 1'000'000ll,

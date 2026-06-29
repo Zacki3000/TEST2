@@ -145,9 +145,28 @@ menu "Example Configuration"
         bool "Enable I2C temperature sensor"
         default y
 
+    config ENABLE_TX
+        bool "Enable transmitting frames (EXPERIMENTAL)"
+        default n
+        help
+            This feature is highly experimental and has not been designed or tested for compliance with ETSI EN 302 571.
+
+            Only transmit frames in a controlled lab environment.
+
     config ENABLE_TX_TEST
         bool "Enable tx_test command"
+        depends on ENABLE_TX
         default n
+        help
+            The tx_test command sends a garbage frame 10 times per second. You likely won't need this.
+
+    config ENABLE_ITS
+        bool "Enable ITS"
+        depends on ENABLE_TX
+        default n
+        help
+            Enable sending CAMs with the position received via GNSS. If more features are added, the dependency on ENABLE_TX
+            may be removed.
 
     config ENABLE_GNSS
         bool "Enable GNSS positioning and time sync"
@@ -155,7 +174,7 @@ menu "Example Configuration"
         help
             Enables receiving of position and synchronization of system time via an external GNSS receiver.
 
-            Currently only tested to work with ATGM336H module.
+            Currently only tested to work with the ATGM336H module.
 
     menu "GNSS pin configuration (UART + PPS)"
         depends on ENABLE_GNSS
@@ -181,9 +200,5 @@ menu "Example Configuration"
             help
                 GPIO pin number for PPS (Pulse Per Second).
     endmenu
-
-    config ENABLE_ITS
-        bool "Enable ITS"
-        default n
 
 endmenu
