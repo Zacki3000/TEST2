@@ -3,17 +3,17 @@ on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: espressif/idf:release-v6.1
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: 'recursive'
-      - name: Build ESP-IDF Project
-        uses: espressif/esp-idf-ci-action@v1
-        with:
-          esp_idf_version: v6.1
-          target: esp32c5
-          path: '.'
+      - name: Build Project
+        run: |
+          . $IDF_PATH/export.sh
+          idf.py set-target esp32c5
+          idf.py build
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
