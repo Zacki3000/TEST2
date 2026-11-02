@@ -13,6 +13,7 @@ jobs:
         run: |
           . $IDF_PATH/export.sh
           idf.py set-target esp32c5
+          idf.py fullclean
           idf.py build
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
