@@ -9,17 +9,21 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: 'recursive'
-      - name: Force Large Partition Layout
+      - name: Create Force Config Defaults
         run: |
-          # Wir schalten die Standardtabelle hart auf die große 3MB-Tabelle um
-          sed -i 's/CONFIG_PARTITION_TABLE_SINGLE_APP=y/CONFIG_PARTITION_TABLE_SINGLE_APP_LARGE=y/g' sdkconfig
-          sed -i 's/CONFIG_PARTITION_TABLE_FILENAME="partitions_singleapp.csv"/CONFIG_PARTITION_TABLE_FILENAME="partitions_singleapp_large.csv"/g' sdkconfig
+          # Wir erzeugen eine unüberschreibbare Standardkonfiguration für die Partitionsgröße
+          echo 'CONFIG_PARTITION_TABLE_SINGLE_APP=n' > sdkconfig.defaults
+          echo 'CONFIG_PARTITION_TABLE_SINGLE_APP_LARGE=y' >> sdkconfig.defaults
+          echo 'CONFIG_PARTITION_TABLE_FILENAME="partitions_singleapp_large.csv"' >> sdkconfig.defaults
+          echo 'CONFIG_PARTITION_TABLE_CUSTOM=n' >> sdkconfig.defaults
       - name: Build Project
         run: |
           . $IDF_PATH/export.sh
+          # Wir löschen alle alten Cache-Dateien vollständig
+          rm -rf build sdkconfig
           idf.py set-target esp32c5
-          idf.py fullclean
-          idf.py build
+          # Wir bauen frisch und binden unsere Defaults-Datei fest ein
+          idf.py -D SDKCONFIG_DEFAULTS="sdkconfig.defaults" build
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
